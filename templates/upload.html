@@ -3,27 +3,33 @@
 <h2>Select a file to upload</h2>
 <p>
 	{% with messages = get_flashed_messages() %}
-	  {% if messages %}
-		<ul>
+	{% if messages %}
+	<ul>
 		{% for message in messages %}
-		  <li>{{ message }}</li>
+		<li>{{ message }}</li>
 		{% endfor %}
-		</ul>
-	  {% endif %}
+	</ul>
+	{% endif %}
 	{% endwith %}
 </p>
-{% if filename %}
-	<div>
-		<img src="{{ url_for('display_image', filename=filename) }}">
-	</div>
-{% endif %}
 <form method="post" action="/upload" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
-			<input type="file" name="image" autocomplete="off" required>
+			<dt>Image Name:</dt>
+			<input type="text" name="name">
 		</p>
-    </dl>
-    <p>
+		<p>
+			<dt>Image Web URL:</dt>
+			<input type="text" name="image_url">
+		</p>
+	</dl>
+	<p>
 		<input type="submit" value="Submit">
 	</p>
 </form>
+{% if image_url %}
+<div>
+	<h3>Image here</h3>
+	<img src="{{image_url}}" width="400" height="400">
+</div>
+{% endif %}

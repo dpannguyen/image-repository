@@ -18,12 +18,12 @@
             <td></td>
         </thead>
 
-        {% for item in inventory %}
+        {% for image in images %}
         <tr>
-            <td>{{item["id"]}}</td>
-            <td>{{item["name"]}}</td>
-            <td>{{item["url"]}}/></td>
-            <td>{{item["labels"]}}</td>
+            <td>{{image["id"]}}</td>
+            <td>{{image["name"]}}</td>
+            <td><img src='{{image["url"]}}'width="400" height="400"></td>
+            <td>{{image["labels"]}}</td>
         </tr>
         {% endfor %}
     </table>
