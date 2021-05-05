@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+    <title>Image Repository</title>
+    <link rel="stylesheet" type="text/css" href="static/css/home.css">
+    <link href="https://fonts.googleapis.com/css?family=Mali" rel="stylesheet">
+</head>
+
+<h2>Marketplace</h2>
+
+<body>
+    <table>
+        <thead>
+            <td>ID</td>
+            <td>Name</td>
+            <td>Image</td>
+            <td>Labels</td>
+            <td></td>
+        </thead>
+
+        {% for item in inventory %}
+        <tr>
+            <td>{{item["id"]}}</td>
+            <td>{{item["name"]}}</td>
+            <td>{{item["url"]}}/></td>
+            <td>{{item["labels"]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
