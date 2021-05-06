@@ -62,29 +62,36 @@ def get_image_labels(image_url):
     return ', '.join(labels)
 
 
-@app.route("/")
-def index_page():
+def get_images(query):
     conn = get_connection()
-    rows = conn.execute("SELECT rowid, * FROM images")
-
+    rows = conn.execute(query)
     images = []
     for row in rows:
         images.append({
-            'id': row[0],
-            'name': row[1],
-            'url': row[2],
-            'labels': row[3]
+            'name': row[0],
+            'url': row[1]
         })
+    return images
+
+
+@app.route('/', methods = ['GET', 'POST'])
+def index_search():
+    query = "SELECT name, url FROM images"
+
+    if request.method == 'POST':
+        search = request.form['search']
+        if search:
+            query = "SELECT name, url FROM images WHERE labels LIKE '%" + search + "%'"
+    
+    images = get_images(query)
     return render_template('index.html', images = images)
 
 
-@app.route('/upload')
-def upload_page():
-    return render_template('upload.html')
-
-
-@app.route('/upload', methods = ['POST'])
+@app.route('/upload', methods = ['GET', 'POST'])
 def upload_image():
+    if request.method == 'GET':
+        return render_template('upload.html')
+
     name = request.form['name']
     image_url = request.form['image_url']
 
@@ -101,6 +108,7 @@ def upload_image():
     else:
         flash("Unsupported extension. The supported extensions are png, jpg, and jpeg")
         return redirect(request.url)
+
 
 if __name__ == '__main__':
     initialize_repository()

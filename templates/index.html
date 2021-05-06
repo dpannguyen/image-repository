@@ -5,19 +5,18 @@
     <link rel="stylesheet" type="text/css" href="static/css/home.css">
     <link href="https://fonts.googleapis.com/css?family=Mali" rel="stylesheet">
 </head>
-
-<h2>Marketplace</h2>
-
 <body>
+    <h2>Image Collection</h2>
+    <form method=post>
+        <input type="text" name="search" class="search" placeholder="Search by image characteristic">
+        <input type="submit" value="Search">
+    </form>
+    <hr>
     <table>
-        <thead>
-            <td>ID</td>
-            <td>Name</td>
-            <td>Image</td>
-            <td>Labels</td>
-            <td></td>
-        </thead>
-
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+        </tr>
         {% for image in images %}
         <tr>
             <td>{{image["id"]}}</td>
@@ -27,6 +26,8 @@
         </tr>
         {% endfor %}
     </table>
+    <hr>
+    <a href="/upload">Add New Web Image</a>
 </body>
 
 </html>

@@ -1,4 +1,5 @@
 <!doctype html>
+<html>
 <title>Python Flask File Upload Example</title>
 <h2>Select a file to upload</h2>
 <p>
@@ -29,7 +30,10 @@
 </form>
 {% if image_url %}
 <div>
-	<h3>Image here</h3>
+	<h3>Image added</h3>
 	<img src="{{image_url}}" width="400" height="400">
 </div>
 {% endif %}
+<hr>
+<a href="/">Return to Main Page</a>
+</html>
