@@ -15,7 +15,6 @@ def get_connection():
     conn = None
     try:
         conn = sql.connect('collection.db')
-        print("Connected to image collection")
     except:
         print("Failed to connect to image collection")
     return conn
@@ -26,14 +25,12 @@ def initialize_repository():
     conn.execute("DROP TABLE IF EXISTS images")
     conn.execute("CREATE TABLE images(name TEXT, url TEXT UNIQUE, labels TEXT)")
     conn.commit()
-    print("Initialized image collection")
 
 
 def check_extension(filename):
     print(filename)
     index = len(filename) - filename[::-1].index('.')
     ext = filename[index:].lower()
-    print(ext)
     return ext in ALLOWED_EXTENSIONS
 
 
@@ -50,8 +47,6 @@ def connect_to_api(image_url):
 
     payload = "{\"source\": \"" + image_url + "\", \"sourceType\": \"url\"}"
     response = requests.request("POST", url, data = payload, headers = headers)
-
-    print(response.text)
     return response.json()
 
 
@@ -75,20 +70,21 @@ def get_images(query):
 
 
 @app.route('/', methods = ['GET', 'POST'])
-def index_search():
+def index_page():
     query = "SELECT name, url FROM images"
 
     if request.method == 'POST':
         search = request.form['search']
         if search:
             query = "SELECT name, url FROM images WHERE labels LIKE '%" + search + "%'"
+            flash("Search result for " + search)
     
     images = get_images(query)
     return render_template('index.html', images = images)
 
 
 @app.route('/upload', methods = ['GET', 'POST'])
-def upload_image():
+def upload_page():
     if request.method == 'GET':
         return render_template('upload.html')
 
@@ -96,13 +92,12 @@ def upload_image():
     image_url = request.form['image_url']
 
     if check_extension(image_url):
-        flash("Image successfully uploaded")
-
         labels = get_image_labels(image_url)
         conn = get_connection()
         conn.execute("INSERT OR IGNORE INTO images(name, url, labels) VALUES (?, ?, ?)", (name, image_url, labels))
         conn.commit()
 
+        flash("Image successfully added to collection")
         return render_template('upload.html', image_url = image_url)
 
     else:
