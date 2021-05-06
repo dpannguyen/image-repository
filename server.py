@@ -17,6 +17,7 @@ def get_connection():
         conn = sql.connect('collection.db')
     except:
         print("Failed to connect to image collection")
+        exit()
     return conn
 
 
@@ -34,6 +35,10 @@ def check_extension(filename):
     return ext in ALLOWED_EXTENSIONS
 
 
+def check_web_url(url):
+    return "http" in url
+
+
 def connect_to_api(image_url):
     url = API_URL
 
@@ -47,14 +52,29 @@ def connect_to_api(image_url):
 
     payload = "{\"source\": \"" + image_url + "\", \"sourceType\": \"url\"}"
     response = requests.request("POST", url, data = payload, headers = headers)
-    return response.json()
+
+    response_json = None
+    try:
+        response_json = response.json()
+    except:
+        print("Failed to connect to Google AI Vision API")
+    return response_json
 
 
 def get_image_labels(image_url):
     response = connect_to_api(image_url)
-    labels = response["labels"]
-    print(labels)
-    return ', '.join(labels)
+    if not response:
+        return None
+        
+    labels = None
+    try:
+        labels = response["labels"]
+    except:
+        print("Bad request to Google AI Vision API")
+        return None
+    else: 
+        print(labels)
+        return ', '.join(labels)
 
 
 def get_images(query):
@@ -72,13 +92,11 @@ def get_images(query):
 @app.route('/', methods = ['GET', 'POST'])
 def index_page():
     query = "SELECT name, url FROM images"
-
     if request.method == 'POST':
         search = request.form['search']
         if search:
             query = "SELECT name, url FROM images WHERE labels LIKE '%" + search + "%'"
             flash("Search result for " + search)
-    
     images = get_images(query)
     return render_template('index.html', images = images)
 
@@ -90,16 +108,27 @@ def upload_page():
 
     name = request.form['name']
     image_url = request.form['image_url']
+    
+    if not name or not image_url:
+        flash("Please provide a name and a web URL for the image")
+        return redirect(request.url)
+
+    if not check_web_url(image_url):
+        flash("Cannot accept local images. Please retry with web image URL")
+        return redirect(request.url)
 
     if check_extension(image_url):
         labels = get_image_labels(image_url)
+        if not labels:
+            flash("Something went wrong. Please retry with another web image URL")
+            return redirect(request.url)
+
         conn = get_connection()
         conn.execute("INSERT OR IGNORE INTO images(name, url, labels) VALUES (?, ?, ?)", (name, image_url, labels))
         conn.commit()
 
         flash("Image successfully added to collection")
         return render_template('upload.html', image_url = image_url)
-
     else:
         flash("Unsupported extension. The supported extensions are png, jpg, and jpeg")
         return redirect(request.url)

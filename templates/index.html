@@ -11,6 +11,17 @@
         <input type="text" name="search" class="search" placeholder="Search by image characteristic">
         <input type="submit" value="Search">
     </form>
+    <p>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </p>
     <hr>
     <table>
         <tr>
@@ -19,7 +30,6 @@
         </tr>
         {% for image in images %}
         <tr>
-            <td>{{image["id"]}}</td>
             <td>{{image["name"]}}</td>
             <td><img src='{{image["url"]}}'width="400" height="400"></td>
             <td>{{image["labels"]}}</td>
