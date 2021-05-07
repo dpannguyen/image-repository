@@ -1,39 +1,57 @@
 <!doctype html>
-<html>
-<title>Python Flask File Upload Example</title>
-<h2>Select a file to upload</h2>
-<p>
-	{% with messages = get_flashed_messages() %}
-	{% if messages %}
-	<ul>
-		{% for message in messages %}
-		<li>{{ message }}</li>
-		{% endfor %}
-	</ul>
-	{% endif %}
-	{% endwith %}
-</p>
-<form method="post" action="/upload" enctype="multipart/form-data">
-	<dl>
+<html lang="en">
+	<head>
+		<title>Upload Image</title>
+		<link href="static/css/template.css?rnd=11" type="text/css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+	</head>
+	
+	<body>
+		<header>
+			<div class="container">
+				<div class="site-title">
+					<h1><a href="/">Add Web Image</a></h1>
+				</div>
+				<div class="add-image">
+					<h3><a href="/">Collection</a></h3>
+				</div>
+			</div>
+		</header>
+		
 		<p>
-			<dt>Image Name:</dt>
-			<input type="text" name="name">
+			{% with messages = get_flashed_messages() %}
+			{% if messages %}
+			{% for message in messages %}
+				{{ message }}
+			{% endfor %}
+			{% endif %}
+			{% endwith %}
 		</p>
-		<p>
-			<dt>Image Web URL:</dt>
-			<input type="text" name="image_url">
-		</p>
-	</dl>
-	<p>
-		<input type="submit" value="Submit">
-	</p>
-</form>
-{% if image_url %}
-<div>
-	<h3>Image added</h3>
-	<img src="{{image_url}}" width="400" height="400">
-</div>
-{% endif %}
-<hr>
-<a href="/">Return to Main Page</a>
+
+		<form method="post" class="form-upload">
+			<div class="container-upload">
+				<h2>Image Name:</h2>
+				<div class="search-box">
+					<input name="name" type="text">
+				</div>
+			</div>
+			<div class="container-upload">
+				<h2>Image Web URL:</h2>
+				<div class="search-box">
+					<input name="image_url" type="text">
+				</div>
+			</div>
+			<div class="container-upload">
+				<div class="search-button add-image">
+					<input type="submit" value="SUBMIT">
+				</div>
+			</div>
+		</form>
+
+		<div class="row">
+			<img src="{{image_url}}">
+		</div>
+		
+		<footer></footer>
+	</body>
 </html>

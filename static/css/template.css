@@ -1,0 +1,244 @@
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0rem;
+}
+
+body {
+    line-height: 1.7;
+    background: #000;
+    color: #fff;
+    font-weight: 300;
+    font-size: 1rem;
+    font-family: "Josefin Sans", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    text-align: left;
+}
+
+header {
+    margin-bottom: 0rem;
+    position: relative;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+.container {
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    display: flex;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+.container-upload {
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 2rem;
+    display: flex;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+table {
+    padding-top: 2rem;
+}
+
+.site-title {
+    flex: 0 0 50%;
+    max-width: 50%;
+    position: relative;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.add-image {
+    top: 2rem;
+    right: 0rem;
+    position: absolute;
+    width: auto;
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 0rem;
+    margin-top: 0rem;
+    font-weight: 500;
+    display: block;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 1rem;
+    margin-bottom: 0rem;
+    margin-top: 0rem;
+    font-weight: 500;
+    display: flex;
+    text-transform: uppercase;
+    align-items: center;
+    width: 9rem;
+}
+
+h3 {
+    font-size: 1rem;
+    margin-bottom: 0rem;
+    margin-top: 0rem;
+    font-weight: 500;
+    display: block;
+    text-transform: uppercase;
+}
+
+a {
+    color: #fff;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    padding: 0rem 1rem 0rem 1rem;
+}
+
+.col {
+    padding-right: 15px;
+    padding-left: 15px;
+    position: relative;
+    display: flex;
+}
+
+.img-wrapper {
+    display: flex;
+    top: 0rem;
+    left: 1rem;
+    right: 1rem;
+    margin-bottom: 30px;
+    max-width: 29rem;
+    overflow: hidden;
+    justify-content: center;
+}
+
+img {
+    vertical-align: middle;
+    border-style: none;
+    height: 25rem;
+    width: auto;
+}
+
+.img-info {
+    text-align: center;
+    position: absolute;
+    font-size: 2rem;
+    line-height: 25rem;
+    font-weight: 500;
+    display: block;
+}
+
+.btn {
+    padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #000;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: .1em;
+}
+
+footer {
+    padding-bottom: 1.5rem;
+    padding-top: 1.5rem;
+    display: block;
+}
+
+form {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.form-upload {
+    display: block;
+}
+
+.search-box {
+    position: relative;
+    border: 1px solid transparent;
+    border-color: #fff;
+    color: #fff;
+    border-width: 2px;
+    width: auto;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding: 0.5rem 0.1rem 0.5rem 0.5rem;
+    align-items: center;
+    letter-spacing: .1em;
+    flex: 0 0 80%;
+    max-width: 60%;
+}
+
+.search-button {
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    border-color: #fff;
+    color: #fff;
+    border-width: 2px;
+    letter-spacing: .1em;
+    position: relative;
+    width: auto;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+input {
+    font-size: 1rem;
+    color: #fff;
+    background-color: transparent;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+    outline: none;
+}
+
+input[type=text] {
+    font-size: 1rem;
+    color: #fff;
+    background-color: transparent;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+    outline: none;
+    width: 100%;
+}
+
+input[type=submit] {
+    cursor: pointer;
+}
+
+p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: block;
+    padding-left: 30px;
+    padding-bottom: 1rem;
+}
+
+.info {
+    width: 100%;
+}

@@ -1,43 +1,59 @@
 <!doctype html>
-<html>
-<head>
-    <title>Image Repository</title>
-    <link rel="stylesheet" type="text/css" href="static/css/home.css">
-    <link href="https://fonts.googleapis.com/css?family=Mali" rel="stylesheet">
-</head>
-<body>
-    <h2>Image Collection</h2>
-    <form method=post>
-        <input type="text" name="search" class="search" placeholder="Search by image characteristic">
-        <input type="submit" value="Search">
-    </form>
-    <p>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-    </p>
-    <hr>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Image</th>
-        </tr>
-        {% for image in images %}
-        <tr>
-            <td>{{image["name"]}}</td>
-            <td><img src='{{image["url"]}}'width="400" height="400"></td>
-            <td>{{image["labels"]}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    <hr>
-    <a href="/upload">Add New Web Image</a>
-</body>
+<html lang="en">
+    <head>
+        <title>Image Repository</title>
+        <link href="static/css/template.css?rnd=11" type="text/css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    </head>
 
+    <body>
+        <header>
+            <div class="container">
+                <div class="site-title">
+                    <h1><a href="/">Image Collection</a></h1>
+                </div>
+                <div class="add-image">
+                    <h3><a href="/upload">Add Image [+]</a></h3>
+                </div>
+            </div>
+        </header>
+
+        <form method="post">
+            <div class="search-box">
+                <input name="search" type="text" placeholder="Search by Image Characteristic">
+            </div>
+            <div class="search-button">
+                <input type="submit" value="SEARCH">
+            </div>
+        </form>
+
+        <p>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </p>
+        
+        <table class="container">
+            {% for row in images %}
+            <div class="row">
+                {% for image in row %}
+                <div class="col">
+                    <div class="img-wrapper">
+                        <div class="img-info">
+                            <a href='/image{{image["id"]}}' class="btn">{{image["name"]}}</a>
+                        </div>
+                        <img src='{{image["url"]}}'>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </table>
+        
+        <footer></footer>
+    </body>
 </html>

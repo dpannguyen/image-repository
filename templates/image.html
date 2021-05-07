@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Image Info</title>
+		<link href="static/css/template.css?rnd=11" type="text/css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+	</head>
+	
+	<body>
+		<header>
+			<div class="container">
+				<div class="site-title">
+					<h1><a href="/">Image Info</a></h1>
+				</div>
+				<div class="add-image">
+					<h3><a href="/">Collection</a></h3>
+				</div>
+			</div>
+        </header>
+        
+        <div class="container-upload">
+            <h2>Image Name:</h2>
+            <h2 class="info">{{image["name"]}}</h2>
+        </div>
+        <div class="container-upload">
+            <h2>Image Labels:</h2>
+            <h2 class="info">{{image["labels"]}}</h2>
+        </div>
+        <div class="container-upload"></div>
+        <div class="row">
+            <img src='{{image["url"]}}'>
+        </div>
+		
+		<footer></footer>
+	</body>
+</html>
