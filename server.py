@@ -6,7 +6,7 @@ from flask import Flask, render_template, flash, redirect, request
 
 # read config file
 config = ConfigParser()
-config.read('config.ini')
+config.read('utils/config.ini')
 
 
 # set image extensions
@@ -23,7 +23,7 @@ app.secret_key = secrets.token_urlsafe(16)
 def get_connection():
     conn = None
     try:
-        conn = sql.connect('collection.db')
+        conn = sql.connect('database/collection.db')
     except:
         print("Failed to connect to image collection")
         exit()
@@ -58,7 +58,7 @@ def check_web_url(url):
 def connect_to_api(image_url):
     url = API_URL
 
-    with open('api_key.bin', encoding = 'utf-8') as binary_file:
+    with open('utils/api_key.bin', encoding = 'utf-8') as binary_file:
         api_key = binary_file.read()
     headers = {
         'content-type': config.get('google.ai.vision', 'content.type'),

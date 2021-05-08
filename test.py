@@ -7,28 +7,29 @@ from selenium.common.exceptions import NoSuchElementException
 
 # read config file
 config = ConfigParser()
-config.read('config.ini')
+config.read('utils/config.ini')
 
 
 # initialize Safari webdriver
+"""
 driver = webdriver.Safari()
 driver.implicitly_wait(10)
 driver.maximize_window()
+"""
 
 # initialize Chrome webdriver (for Mac)
-"""
 driver_path = config.get('chromedriver', 'path')
 executable_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), driver_path)
 driver = webdriver.Chrome(executable_path = executable_path)
 driver.implicitly_wait(10)
 driver.maximize_window()
-"""
 
 
 # load main collection page
 def open_main_page():
     url = config.get('application', 'main.url')
     driver.get(url)
+    # driver.find_element_by_css_selector("title")
     time.sleep(2)
     assert driver.current_url == url, "Test 1: Failed to load main page"
 
