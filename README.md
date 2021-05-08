@@ -2,20 +2,20 @@
 
 ## About
 
-* A python project to build an image repository with the following features:
-    1. Search from characteristics of the images
-        * The project uses Google AI Vision API to generate a list of labels (characteristics) for each image provided
-        * e.g. a photo of fried chicken might have labels such as 'chicken', 'food', 'fast food', 'frying', etc.
-    2. Add a new web image to the collection
-        * Due to limitations of the API access, only web images can be used to generate list of labels
+A python project to build an image repository with the following features:
+1. Search from characteristics of the images
+    * The project uses Google AI Vision API to generate a list of labels (characteristics) for each image provided
+    * e.g. a photo of fried chicken might have labels such as 'chicken', 'food', 'fast food', 'frying', etc.
+2. Add a new web image to the collection
+    * Due to limitations of the API access, only web images can be used to generate list of labels
 
-* Automated tests of the UI are included. The tests include:
-    1. Tests for main page
-    2. Tests for add image page
-    3. Tests for image info page
-    4. Tests for search functionality of image characteristics (positive and negative)
+Automated tests of the UI are included. The tests include:
+1. Tests for main page
+2. Tests for add image page
+3. Tests for image info page
+4. Tests for search functionality of image characteristics (positive and negative)
 
-* The project uses Flask for web application and Selenium for automated testing.   
+The project uses Flask for web application and Selenium for automated testing.   
 
 ## Build project
 
