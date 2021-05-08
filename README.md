@@ -47,7 +47,9 @@ pip install -r requirements.txt
 ## Screenshots
 
 Image Collection
+
 ![Image Collection](https://github.com/dpannguyen/image-repository/blob/main/static/screenshots/image_collection.png)
 
 Sample Search Result
+
 ![Search Result](https://github.com/dpannguyen/image-repository/blob/main/static/screenshots/search_result.png)
