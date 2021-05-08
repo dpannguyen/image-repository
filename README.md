@@ -1,6 +1,7 @@
 # Image Repository
 
 ## About
+
 A python project to build an image repository with the following features:
 1. Search from characteristics of the images
     * The project uses Google AI Vision API to generate a list of labels (characteristics) for each image provided
@@ -44,5 +45,9 @@ pip install -r requirements.txt
         ```
 
 ## Screenshots
+
+Image Collection
 ![Image Collection](https://github.com/dpannguyen/image-repository/blob/main/static/screenshots/image_collection.png)
+
+Sample Search Result
 ![Search Result](https://github.com/dpannguyen/image-repository/blob/main/static/screenshots/search_result.png)
