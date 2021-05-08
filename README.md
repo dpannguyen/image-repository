@@ -43,5 +43,6 @@ pip install -r requirements.txt
         xattr -d com.apple.quarantine chromedriver 
         ```
 
-## Screenshot
-![UI screenshot](https://github.com/dpannguyen/stonks-analyzer/blob/master/frontend/public/ui.png)
+## Screenshots
+![Image Collection](https://github.com/dpannguyen/image-repository/blob/main/static/screenshots/image_collection.png)
+![Search Result](https://github.com/dpannguyen/image-repository/blob/main/static/screenshots/search_result.png)
