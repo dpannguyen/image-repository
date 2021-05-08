@@ -1,13 +1,19 @@
 import requests
 import secrets
 import sqlite3 as sql
+from configparser import ConfigParser
 from flask import Flask, render_template, flash, redirect, request
+
+# read config file
+config = ConfigParser()
+config.read('config.ini')
 
 
 # set image extensions
 # set Google AI Vision API address
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-API_URL = "https://google-ai-vision.p.rapidapi.com/cloudVision/imageLabelsDetection"
+API_URL = config.get('google.ai.vision', 'url')
+
 
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
@@ -55,9 +61,9 @@ def connect_to_api(image_url):
     with open('api_key.bin', encoding = 'utf-8') as binary_file:
         api_key = binary_file.read()
     headers = {
-        'content-type': "application/json",
+        'content-type': config.get('google.ai.vision', 'content.type'),
         'x-rapidapi-key': str(api_key),
-        'x-rapidapi-host': "google-ai-vision.p.rapidapi.com"
+        'x-rapidapi-host': config.get('google.ai.vision', 'host')
     }
 
     payload = "{\"source\": \"" + image_url + "\", \"sourceType\": \"url\"}"
@@ -116,8 +122,8 @@ def get_image_info(query):
     return image[0]
     
 
-# index page which shows the entire image collection
-# page contains search bar that can filter images according to 
+# index page to show the entire image collection
+# contain search bar that can filter images according to 
 # their characteristics (labels)
 # e.g. a photo of fried chicken might have labels such as
 # 'chicken', 'food', 'fast food', 'frying', etc.
@@ -182,5 +188,5 @@ def image_page(id):
 
 
 if __name__ == '__main__':
-    # initialize_repository()
+    initialize_repository()
     app.run()
