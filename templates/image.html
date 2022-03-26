@@ -8,29 +8,33 @@
 	
 	<body>
 		<header>
-			<div class="container">
+			<div class="container menu-container">
 				<div class="site-title">
 					<h1><a href='/image{{image["id"]}}'>Image Info</a></h1>
 				</div>
-				<div class="add-image">
-					<h3><a href="/">Collection</a></h3>
+				<div class="menu-item">
+					<h3><a href="/">Collection [>]</a></h3>
 				</div>
 			</div>
         </header>
-        
-        <div class="container-upload">
-            <h2>Image Name:</h2>
-            <h2 class="info">{{image["name"]}}</h2>
-        </div>
-        <div class="container-upload">
-            <h2>Image Labels:</h2>
-            <h2 class="info">{{image["labels"]}}</h2>
-        </div>
-        <div class="container-upload"></div>
-        <div class="row">
-            <img src='{{image["url"]}}'>
-        </div>
-		
+
+        <div class="img-page">
+			<div class="img-info-box">
+				<div class="img-info">
+					<h2>Image Name:</h2>
+					<h2 class="info">{{image["name"]}}</h2>
+				</div>
+				<div class="img-info">
+					<h2>Image Labels:</h2>
+					<h2 class="info">{{image["labels"]}}</h2>
+				</div>
+				<div class="img-info"></div>
+				<div class="row">
+					<img src='{{image["url"]}}'>
+				</div>
+			</div>
+		</div>
+
 		<footer></footer>
 	</body>
 </html>

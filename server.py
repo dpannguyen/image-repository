@@ -1,23 +1,37 @@
-import requests
+import atexit
+import io
+import os
 import secrets
 import sqlite3 as sql
 from configparser import ConfigParser
 from flask import Flask, render_template, flash, redirect, request
+from google.cloud import vision
+from werkzeug.utils import secure_filename
 
 # read config file
 config = ConfigParser()
 config.read('utils/config.ini')
 
+with open('utils/api_key.bin', encoding = 'utf-8') as binary_file:
+    api_key = binary_file.read()
+with open('utils/api_key.json', 'w') as json_file:
+    json_file.write(api_key)
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'utils/api_key.json'
+
 
 # set image extensions
 # set Google AI Vision API address
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-API_URL = config.get('google.ai.vision', 'url')
-
+UPLOAD_FOLDER = 'static/images/'
 
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
+
+def exit_handler():
+    os.remove('utils/api_key.json')
 
 # connect to database
 def get_connection():
@@ -42,57 +56,45 @@ def initialize_repository():
 
 # check image extensions
 def check_extension(filename):
-    print(filename)
     index = len(filename) - filename[::-1].index('.')
     ext = filename[index:].lower()
     return ext in ALLOWED_EXTENSIONS
 
 
-# check image url provided is not from local path
-def check_web_url(url):
+# check whether image url provided is a web url
+def is_web_url(url):
     return "http" in url
 
 
-# connect to Google AI Vision API
+# connect to Google Vision API
 # return according labels for image
 def connect_to_api(image_url):
-    url = API_URL
+    client = vision.ImageAnnotatorClient()
+    if is_web_url(image_url):
+        image = vision.Image()
+        image.source.image_uri = image_url
+    else:
+        with io.open(image_url, 'rb') as image_file:
+            content = image_file.read()
+        image = vision.Image(content = content)
 
-    with open('utils/api_key.bin', encoding = 'utf-8') as binary_file:
-        api_key = binary_file.read()
-    headers = {
-        'content-type': config.get('google.ai.vision', 'content.type'),
-        'x-rapidapi-key': str(api_key),
-        'x-rapidapi-host': config.get('google.ai.vision', 'host')
-    }
-
-    payload = "{\"source\": \"" + image_url + "\", \"sourceType\": \"url\"}"
-    response = requests.request("POST", url, data = payload, headers = headers)
-
-    response_json = None
-    try:
-        response_json = response.json()
-    except:
-        print("Failed to connect to Google AI Vision API")
-    return response_json
+    response = client.label_detection(image = image)
+    if response.error.message:
+        print("Failed to connect to Google AI Vision API: {}".format(response.error.message))
+    else:
+        labels = response.label_annotations
+        return labels
 
 
-# call method to connect to Google API
+# call method to connect to Google Vision API
 # format and return image labels as string
 def get_image_labels(image_url):
-    response = connect_to_api(image_url)
-    if not response:
+    labels = connect_to_api(image_url)
+    if not labels:
         return None
-
-    labels = None
-    try:
-        labels = response["labels"]
-    except:
-        print("Bad request to Google AI Vision API")
-        return None
-    else: 
-        print(labels)
-        return ', '.join(labels)
+    else:
+        label_descriptions = [label.description for label in labels]
+        return ', '.join(label_descriptions)
 
 
 # get all images (name and photo) from database
@@ -133,8 +135,8 @@ def index_page():
     if request.method == 'POST':
         search = request.form['search']
         if search:
-            query = "SELECT rowid, name, url FROM images WHERE labels LIKE '%" + search + "%'"
-            flash("Search result(s) for " + search)
+            query = "SELECT rowid, name, url FROM images WHERE labels LIKE '%{}%'".format(search)
+            flash("Search result(s) for {}".format(search))
     images = get_images(query)
     return render_template('index.html', images = images)
 
@@ -150,39 +152,74 @@ def upload_page():
     if request.method == 'GET':
         return render_template('upload.html')
 
-    name = request.form['name']
+    name = request.form['image_name']
     image_url = request.form['image_url']
+    image_upload = request.files['image_upload']
     
-    if not name or not image_url:
-        flash("Please provide a name and a web URL for the image")
+    if not name:
+        flash("Please provide a name for the image")
         return redirect(request.url)
 
-    if not check_web_url(image_url):
-        flash("Cannot accept local images. Please retry with web image URL")
+    if (not image_url and not image_upload) or (image_url and image_upload):
+        flash("Please provide either a web image url or upload a local image")
         return redirect(request.url)
 
-    if check_extension(image_url):
-        labels = get_image_labels(image_url)
+    if image_upload:
+        if image_upload.filename == '':
+            flash("No image selected")
+            return redirect(request.url)
+
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(image_upload.filename))
+    else:
+        image_path = image_url
+    
+    if check_extension(image_path):
+        if image_upload: image_upload.save(image_path)
+        
+        labels = get_image_labels(image_path)
         if not labels:
-            flash("Something went wrong. Please retry with another web image URL")
+            flash("Something went wrong. Please retry with another image URL")
             return redirect(request.url)
 
         conn = get_connection()
-        conn.execute("INSERT OR IGNORE INTO images(name, url, labels) VALUES (?, ?, ?)", (name, image_url, labels))
+        conn.execute("INSERT OR IGNORE INTO images(name, url, labels) VALUES (?, ?, ?)", (name, image_path, labels))
         conn.commit()
 
         flash("Image successfully added to collection")
-        return render_template('upload.html', image_url = image_url)
+        return render_template('upload.html', image_path = image_path)
     else:
         flash("Unsupported extension. The supported extensions are png, jpg, and jpeg")
         return redirect(request.url)
+
+
+# page to delete a web image
+@app.route('/delete', methods = ['GET', 'POST'])
+def delete_page():
+    query = "SELECT rowid, name, url FROM images"
+    images = get_images(query)
+
+    if request.method == 'GET':
+        return render_template('delete.html', images = images)
+
+    for id in request.form:
+        image_id = id
+
+    if not image_id:
+        return redirect(request.url)
+
+    conn = get_connection()
+    conn.execute("DELETE FROM images WHERE rowid = (?)", (image_id))
+    conn.commit()
+
+    flash("Image successfully deleted from collection")
+    return redirect(request.url)
 
 
 # page to display all information of an image
 # including name, labels, and the image itself
 @app.route('/image<id>')
 def image_page(id):
-    query = "SELECT rowid, name, url, labels FROM images WHERE rowid = '" + id + "'"
+    query = "SELECT rowid, name, url, labels FROM images WHERE rowid = '{}'".format(id)
     image = get_image_info(query)
     return render_template('image.html', image = image)
 
@@ -190,3 +227,4 @@ def image_page(id):
 if __name__ == '__main__':
     initialize_repository()
     app.run()
+    atexit.register(exit_handler)

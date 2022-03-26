@@ -1,4 +1,5 @@
 flask
+google-cloud-vision
 mysql-connector-python
 requests
 selenium

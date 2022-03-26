@@ -1,32 +1,22 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Image Repository</title>
+        <title>Delete Image</title>
         <link href="static/css/template.css" type="text/css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     </head>
 
     <body>
         <header>
-            <div class="container">
+            <div class="container menu-container">
                 <div class="site-title">
-                    <h1><a href="/">Image Collection</a></h1>
+                    <h1><a href="/delete">Delete Image</a></h1>
                 </div>
                 <div class="menu-item">
-                    <h3><a href="/upload">Add Image [+]</a></h3>
-                    <h3><a href="/delete">Delete Image [-]</a></h3>
+                    <h3><a href="/">Collection [>]</a></h3>
                 </div>
             </div>
         </header>
-
-        <form method="post" class="form-search">
-            <div class="search-box">
-                <input name="search" type="text" placeholder="search by image characteristic">
-            </div>
-            <div class="search-button">
-                <input type="submit" value="search">
-            </div>
-        </form>
 
         <div class="message-box">
 			<div class="message">
@@ -42,22 +32,24 @@
             </div>
         </div>
         
-        <table class="container">
-            {% for row in images %}
-            <div class="row">
-                {% for image in row %}
-                <div class="col">
-                    <div class="img-wrapper">
-                        <div class="img-box">
-                            <a href='/image{{image["id"]}}' class="btn">{{image["name"]}}</a>
+        <form method="post">
+            <table class="container">
+                {% for row in images %}
+                <div class="row">
+                    {% for image in row %}
+                    <div class="col">
+                        <div class="img-wrapper">
+                            <div class="img-box">
+                                <input type="submit" name='{{image["id"]}}' value='[x] {{image["name"]}}' class="btn">
+                            </div>
+                            <img src='{{image["url"]}}'>
                         </div>
-                        <img src='{{image["url"]}}'>
                     </div>
+                    {% endfor %}
                 </div>
                 {% endfor %}
-            </div>
-            {% endfor %}
-        </table>
+            </table>
+        </form>
         
         <footer></footer>
     </body>
